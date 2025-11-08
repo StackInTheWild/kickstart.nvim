@@ -186,6 +186,8 @@ return {
         command = 'netcoredbg',
         args = { '--interpreter=vscode' },
       }
+
+      require('easy-dotnet.netcoredbg').register_dap_variables_viewer() -- special variables viewer specific for .NET
     end
 
     require('mason-nvim-dap').setup {

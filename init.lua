@@ -315,13 +315,12 @@ require('lazy').setup({
 
       -- Document existing key chains
       spec = {
-        { '<leader>c', group = '[C]ode', mode = { 'n', 'x' } },
-        { '<leader>d', group = '[D]ocument' },
-        { '<leader>r', group = '[R]ename' },
-        { '<leader>s', group = '[S]earch' },
-        { '<leader>w', group = '[W]orkspace' },
-        { '<leader>t', group = '[T]oggle' },
-        { '<leader>h', group = 'Git [H]unk', mode = { 'n', 'v' } },
+        -- { '<leader>c', group = '[C]ode', mode = { 'n', 'x' } },
+        -- { '<leader>r', group = '[R]ename' },
+        -- { '<leader>s', group = '[S]earch' },
+        -- { '<leader>w', group = '[W]orkspace' },
+        -- { '<leader>t', group = '[T]oggle' },
+        -- { '<leader>h', group = 'Git [H]unk', mode = { 'n', 'v' } },
       },
     },
   },
@@ -1029,3 +1028,13 @@ require('nvim-jest').setup {
 vim.keymap.set('n', '<leader>tl', '<cmd>vsplit<cr><cmd>terminal<cr>i', { desc = 'Open [T]erminal right' })
 vim.keymap.set('n', '<leader>tj', '<cmd>split<cr><cmd>terminal<cr>i', { desc = 'Open [T]erminal down' })
 vim.keymap.set('t', '<ctrl-c>', '<cmd>bd!<cr>', { desc = 'Close terminal' })
+
+vim.keymap.set('n', '<leader>do', '<cmd>DiffviewOpen<cr>', { desc = 'Open Diffview' })
+vim.keymap.set('n', '<leader>dc', '<cmd>DiffviewClose<cr>', { desc = 'Close Diffview' })
+
+vim.keymap.set('n', '<leader>gs', '<cmd>Git status<cr>', { desc = 'Git status' })
+vim.keymap.set('n', '<leader>gfa', '<cmd>Git fetch --all<cr>', { desc = 'Git fetch all' })
+vim.keymap.set('n', '<leader>gff', [[:Git fetch origin ]], { desc = 'Git fetch branch' })
+vim.keymap.set('n', '<leader>gmo', [[:Git merge origin/]], { desc = 'Git merge branch' })
+vim.keymap.set('n', '<leader>gp', '<cmd>Git pull<cr>', { desc = 'Git pull' })
+vim.keymap.set('n', '<leader>gc', [[:Git checkout ]], { desc = 'Git checkout ' })
