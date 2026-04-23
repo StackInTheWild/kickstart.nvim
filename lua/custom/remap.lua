@@ -10,7 +10,7 @@ vim.keymap.set('n', '<C-u>', '<C-u>zz')
 vim.keymap.set('n', '<C-d>', '<C-d>zz')
 
 -- Primeagen remaps
-vim.keymap.set("n", "<C-f>", "<cmd>silent !tmux neww tmux-sessionizer<CR>")
+vim.keymap.set('n', '<C-f>', '<cmd>silent !tmux neww tmux-sessionizer<CR>')
 
 -- greatest remap ever
 vim.keymap.set('x', '<leader>p', [["_dP]])
@@ -27,3 +27,12 @@ vim.keymap.set('n', '<M-k>', ':1winc-<cr>')
 vim.keymap.set('n', '<M-j>', ':1winc+<cr>')
 vim.keymap.set('n', '<M-h>', ':1winc<<cr>')
 vim.keymap.set('n', '<M-l>', ':1winc><cr>')
+
+vim.keymap.set('n', '<leader>gnb', function()
+  local name = vim.fn.input 'Branch name: story-'
+  if name == '' then
+    return
+  end
+  name = name:gsub('%s', '-')
+  vim.cmd('Git checkout -b story-' .. name)
+end, { desc = '[G]it [N]ew [B]ranch (story-)' })
