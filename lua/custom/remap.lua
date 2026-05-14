@@ -9,6 +9,14 @@ vim.keymap.set('i', 'jk', '<Esc>l', { desc = 'Escape insert mode' })
 vim.keymap.set('n', '<C-u>', '<C-u>zz')
 vim.keymap.set('n', '<C-d>', '<C-d>zz')
 
+-- Use plain scroll in terminal buffers (zz causes viewport snap-back)
+vim.api.nvim_create_autocmd('TermOpen', {
+  callback = function()
+    vim.keymap.set('n', '<C-u>', '<C-u>', { buffer = true })
+    vim.keymap.set('n', '<C-d>', '<C-d>', { buffer = true })
+  end,
+})
+
 -- Primeagen remaps
 vim.keymap.set('n', '<C-f>', '<cmd>silent !tmux neww tmux-sessionizer<CR>')
 

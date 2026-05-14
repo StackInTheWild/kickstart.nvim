@@ -1,6 +1,9 @@
-import React from "react";
 import { Meta, StoryObj } from "@storybook/react";
 import { Tes } from "./Tes";
+
+const asdf = {
+  name: "asdf",
+};
 
 const meta: Meta<typeof Tes> = {
   title: "components/Tes",

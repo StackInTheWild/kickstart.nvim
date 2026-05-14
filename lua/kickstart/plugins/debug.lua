@@ -117,11 +117,6 @@ return {
       dapui.close()
     end
 
-    vim.keymap.set('n', 'q', function()
-      dap.close()
-      dapui.close()
-    end, {})
-
     vim.keymap.set('n', '<F5>', dap.continue, {})
     vim.keymap.set('n', '<F10>', dap.step_over, {})
     vim.keymap.set('n', '<leader>dO', dap.step_over, {})
@@ -135,7 +130,7 @@ return {
     vim.keymap.set('n', '<F2>', require('dap.ui.widgets').hover, {})
 
     local function file_exists(path)
-      local stat = vim.loop.fs_stat(path)
+      local stat = vim.uv.fs_stat(path)
       return stat and stat.type == 'file'
     end
 
