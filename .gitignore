@@ -4,4 +4,6 @@ test.sh
 nvim
 
 spell/
-lazy-lock.json
+
+# lazy-lock.json is intentionally tracked: it pins plugin versions so the config
+# is reproducible across machines. Run `:Lazy restore` to sync to it.

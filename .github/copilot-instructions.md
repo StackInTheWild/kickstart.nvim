@@ -1,50 +1,26 @@
-# Copilot Instructions for kickstart.nvim
+# Copilot Instructions
 
 ## What This Is
 
-A personal Neovim configuration forked from [kickstart.nvim](https://github.com/nvim-lua/kickstart.nvim). It extends the single-file kickstart base (`init.lua`) with custom plugins, keymaps, and settings.
+A personal Neovim (0.12+) configuration, originally forked from kickstart.nvim and split into modules.
+Plugins are managed by lazy.nvim. See `README.md` for the full layout and keymaps.
 
 ## Architecture
 
-- **`init.lua`** — The main configuration file. Contains core settings, keymaps, plugin manager bootstrap (lazy.nvim), and all base plugin specs in a single `require('lazy').setup({...})` call. Also has post-setup configuration at the bottom (Oil, treesitter-context, jest, diffview, fugitive keymaps, etc.).
-- **`lua/kickstart/`** — Optional upstream kickstart plugin modules (e.g., `autopairs`, `neo-tree`, `gitsigns`, `debug`, `lint`, `indent_line`). Loaded via `require 'kickstart.plugins.X'` inside the lazy.setup call.
-- **`lua/custom/plugins/`** — User-added plugin specs, auto-imported via `{ import = 'custom.plugins' }`. Each file returns a lazy.nvim plugin spec table. This is the primary place to add new plugins.
-- **`lua/custom/remap.lua`** — Custom keymaps (loaded via `require 'custom/remap'` at end of init.lua).
-- **`lua/custom/set.lua`** — Custom vim options like colorcolumn, font, termguicolors.
-- **`lua/custom/snippets.lua`** — LuaSnip snippet loader, required from `lua/custom/plugins/init.lua`.
-- **`lua/snippets/`** — Language-specific snippet definitions (e.g., `typescriptreact.lua`).
+- `init.lua` — sets the leader key and `vim.g.have_nerd_font`, then requires `config.options`, `config.keymaps`, `config.autocmds`, `config.lazy`. Nothing else belongs here.
+- `lua/config/` — core editor setup with no plugin dependencies. `lazy.lua` bootstraps lazy.nvim and imports `lua/plugins/`.
+- `lua/plugins/*.lua` — each file returns a **list** of lazy.nvim specs, grouped by domain (ui, editor, lsp, git, dotnet, ...).
+- `snippets/<filetype>.lua` — LuaSnip snippets loaded with `luasnip.loaders.from_lua`.
 
-## Key Conventions
+## Conventions
 
-### Plugin Management
-- Uses **lazy.nvim** for plugin management. Run `:Lazy` to check status, `:Lazy update` to update.
-- LSP servers are managed via **Mason**. Run `:Mason` to manage installed servers.
-- New plugins go in `lua/custom/plugins/` as individual files returning a lazy.nvim spec.
+- Configure plugins through the spec (`opts`, `config`, `keys`), never with a top-level `require('x').setup()` outside the spec.
+- Plugin keymaps go in the spec's `keys` field so the plugin lazy-loads; global keymaps go in `lua/config/keymaps.lua`.
+- Keymap descriptions use `[B]racket` notation for which-key (e.g. `'[S]earch [F]iles'`). Add new `<leader>` groups to the which-key `spec` in `lua/plugins/ui.lua`.
+- Before adding a keymap, check for prefix conflicts (e.g. a `<leader>x` mapping makes every `<leader>x…` mapping wait for `timeoutlen`).
+- Use Neovim 0.12 APIs: `vim.uv`, `vim.lsp.config`/`vim.lsp.enable`, `vim.keymap.set(..., { buf = n })`.
+- New language servers go in the `servers` table in `lua/plugins/lsp.lua`; extra Mason tools in `tools`.
 
-### Code Style
-- Leader key is `<Space>`.
-- Lua code is formatted with **StyLua** (CI enforces this on PRs).
-- StyLua config: 160 column width, 2-space indentation, single quotes preferred, Unix line endings (see `.stylua.toml`).
-- Keymap descriptions use `[B]racket` notation for which-key discoverability (e.g., `'[S]earch [F]iles'`).
+## Code Style
 
-### Formatting
-Run StyLua to check/format Lua files:
-```sh
-stylua --check .
-stylua .
-```
-
-### Editor Settings
-- Default shiftwidth is 4 with expandtab (spaces, not tabs).
-- Format-on-save is enabled via conform.nvim (uses StyLua for Lua, prettierd/prettier for JS/TS/TSX).
-- Nerd Font support is enabled (`vim.g.have_nerd_font = true`).
-- Colorscheme is rose-pine with tokyonight available as a transparent alternative.
-
-### Notable Custom Additions
-- **Oil.nvim** for file browsing (`-` to open).
-- **Harpoon** for file navigation.
-- **Copilot** for AI completions.
-- **nvim-jest** for running Jest tests (`jest_cmd = 'npx jest'`).
-- **Fugitive** and **Diffview** for Git workflows.
-- **Treesitter-context** shows sticky function/class headers.
-- Completion uses `<Enter>` to confirm, `<C-j>`/`<C-k>` to navigate, `<C-l>`/`<C-h>` for snippet jumps.
+Lua is formatted with StyLua (`.stylua.toml`: 160 columns, 2 spaces, single quotes, no call parentheses). CI runs `stylua --check .`.
